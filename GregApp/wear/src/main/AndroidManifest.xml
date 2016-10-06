@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.edavinci.wear.gregapp">
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.DeviceDefault">
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/title_activity_main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <!--activity
+            android:name=".DavinciReminders"
+            android:label="CoolDavinviReminders">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity-->
+        <activity
+            android:name=".activities.ReminderCardExtendedDisplay"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.DeviceDefault.Light"></activity>
+        <activity
+            android:name=".activities.GridActivity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.DeviceDefault.Light"></activity>
+
+        <!--activity
+            android:name=".activities.ListViewActivity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.DeviceDefault.Light"></activity-->
+
+
+        <receiver
+            android:name=".ReminderCardReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.edavinci.wear.gregapp.SHOW_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
+        <activity
+            android:name="android.support.wearable.activity.ConfirmationActivity">
+        </activity>
+    </application>
+
+</manifest>
