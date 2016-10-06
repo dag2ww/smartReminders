@@ -9,4 +9,5 @@
     <string name="hello_round">Hello Round World!</string>
     <string name="hello_square">Hello Square World!</string>
     <string name="create_reminder">Nowe\nPrzypomnienie</string>
+    <string name="reminder_created">Zrobione!</string>
 </resources>
