@@ -1,6 +1,7 @@
 package com.edavinci.wear.gregapp.fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.ConfirmationActivity;
@@ -39,10 +40,10 @@ public class SavedConfirmationFragment extends Fragment{
                             ConfirmationActivity.SUCCESS_ANIMATION);
                     intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
                             R.string.reminder_created);
-
-                    List<ReminderDTO> savedReminders = getSavedReminders(container);
-                    savedReminders.add(savedReminders.get(0));
-                    saveReminders(savedReminders,container);
+                    final Context context = getActivity().getApplicationContext();
+                    List<ReminderDTO> savedReminders = getSavedReminders(context);
+                    savedReminders.add(new ReminderDTO(savedReminders.get(0)));
+                    saveReminders(savedReminders,context);
                     startActivity(intent);
 
                     try {
@@ -58,13 +59,13 @@ public class SavedConfirmationFragment extends Fragment{
 
         }
 
-    public static List<ReminderDTO> getSavedReminders(ViewGroup container) {
+    public static List<ReminderDTO> getSavedReminders( Context context) {
         ObjectInputStream oin = null;
         ArrayList<ReminderDTO> savedReminders = new ArrayList<ReminderDTO>();
         try {
             FileInputStream fin = null;
             try {
-                fin = container.getContext().openFileInput(REMINDERS_LIST_FILENAME);
+                fin = context.openFileInput(REMINDERS_LIST_FILENAME);
                 oin = new ObjectInputStream(fin);
                 if (oin != null) {
                     savedReminders = (ArrayList<ReminderDTO>) oin.readObject();
@@ -81,7 +82,9 @@ public class SavedConfirmationFragment extends Fragment{
         }
         finally{
             try {
-                oin.close();
+                if(oin != null) {
+                    oin.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -89,12 +92,12 @@ public class SavedConfirmationFragment extends Fragment{
         return savedReminders;
     }
 
-    public static void saveReminders(List<ReminderDTO> reminders, ViewGroup container) {
+    public static void saveReminders(List<ReminderDTO> reminders, Context context) {
         ObjectOutputStream oout = null;
         try {
             FileInputStream fin = null;
             try {
-                FileOutputStream fout = container.getContext().openFileOutput(REMINDERS_LIST_FILENAME, container.getContext().MODE_PRIVATE);
+                FileOutputStream fout = context.openFileOutput(REMINDERS_LIST_FILENAME, context.MODE_PRIVATE);
                 oout = new ObjectOutputStream(fout);
                 oout.writeObject(reminders);
             } catch (Exception e) {

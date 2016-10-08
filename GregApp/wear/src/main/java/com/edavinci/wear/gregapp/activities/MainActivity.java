@@ -1,6 +1,7 @@
 package com.edavinci.wear.gregapp.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.wearable.activity.ConfirmationActivity;
@@ -8,6 +9,7 @@ import android.support.wearable.view.WatchViewStub;
 import android.support.wearable.view.WearableListView;
 
 import com.edavinci.wear.gregapp.R;
+import com.edavinci.wear.gregapp.fragments.SavedConfirmationFragment;
 import com.edavinci.wear.gregapp.views.list.ListViewAdapter;
 import com.edavinci.wear.gregapp.views.list.ListViewItem;
 
@@ -24,29 +26,11 @@ public class MainActivity extends Activity implements WearableListView.ClickList
 
     private WearableListView listView;
     private MainActivity activityInstance;
-    private ArrayList<ReminderDTO> savedReminders = new ArrayList<ReminderDTO>();
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityInstance = this;
-        FileInputStream fin = null;
-        ObjectInputStream oin = null;
-        try {
-            fin = openFileInput(REMINDERS_LIST_FILENAME);
-            oin = new ObjectInputStream(fin);
-            savedReminders = (ArrayList<ReminderDTO>)oin.readObject();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-            try {
-                if(oin != null){
-                oin.close();}
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
 
         setContentView(R.layout.activity_main);
         WatchViewStub stub = (WatchViewStub) findViewById(R.id.watch_view_stub);
@@ -56,6 +40,8 @@ public class MainActivity extends Activity implements WearableListView.ClickList
                 listView = (WearableListView) stub.findViewById(R.id.wearable_list_view);
                 List<ListViewItem> viewItemList = new ArrayList<ListViewItem>();
                 viewItemList.add(new ListViewItem(R.drawable.ic_input_add, getString(R.string.create_reminder)));
+                final Context context = getApplicationContext();
+                List<ReminderDTO> savedReminders = SavedConfirmationFragment.getSavedReminders(context);
                 for(ReminderDTO reminder : savedReminders){
                     viewItemList.add(new ListViewItem(R.mipmap.ic_launcher, reminder.toShortString()));
                 }
