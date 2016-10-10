@@ -26,27 +26,25 @@ import static com.edavinci.wear.gregapp.activities.MainActivity.REMINDER_UNDER_W
  * Created by Grzegorz on 2016-09-30.
  */
 
-public class TimePickerFragment extends Fragment{
+public class TimePickerFragment extends Fragment {
 
 
     @Override
-        public View onCreateView(LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.time_picker, container, false);
-            TimePicker timePicker = (TimePicker)view.findViewById(R.id.timePicker2);
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.time_picker, container, false);
+        TimePicker timePicker = (TimePicker) view.findViewById(R.id.timePicker2);
         final Context context = getActivity().getApplicationContext();
 
-        final List<ReminderDTO> savedReminders = SavedConfirmationFragment.getSavedReminders(context);
-        savedReminders.get(REMINDER_UNDER_WORK_INDEX).hourOfday = timePicker.getHour();
-        savedReminders.get(REMINDER_UNDER_WORK_INDEX).minute = timePicker.getMinute();
         timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
-                @Override
-                public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                        savedReminders.get(REMINDER_UNDER_WORK_INDEX).hourOfday = hourOfDay;
-                        savedReminders.get(REMINDER_UNDER_WORK_INDEX).minute = minute;
-                    SavedConfirmationFragment.saveReminders(savedReminders, context);
-                }
-            });
-            return view;
-        }
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                final List<ReminderDTO> savedReminders = SavedConfirmationFragment.getSavedReminders(context);
+                savedReminders.get(REMINDER_UNDER_WORK_INDEX).hourOfday = hourOfDay;
+                savedReminders.get(REMINDER_UNDER_WORK_INDEX).minute = minute;
+                SavedConfirmationFragment.saveReminders(savedReminders, context);
+            }
+        });
+        return view;
+    }
 
 }

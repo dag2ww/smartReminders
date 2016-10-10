@@ -21,7 +21,7 @@ import java.util.List;
 
 public class MainActivity extends Activity implements WearableListView.ClickListener {
 
-    public static final String REMINDERS_LIST_FILENAME = "RemindersListFile.dat";
+    public static final String REMINDERS_LIST_FILENAME = "RemindersListFile1.dat";
     public static final int REMINDER_UNDER_WORK_INDEX = 0;
 
     private WearableListView listView;
@@ -43,6 +43,7 @@ public class MainActivity extends Activity implements WearableListView.ClickList
                 final Context context = getApplicationContext();
                 List<ReminderDTO> savedReminders = SavedConfirmationFragment.getSavedReminders(context);
                 for(ReminderDTO reminder : savedReminders){
+                    System.err.println("reading from file: "+reminder);
                     viewItemList.add(new ListViewItem(R.mipmap.ic_launcher, reminder.toShortString()));
                 }
                 // Assign an adapter to the list

@@ -19,25 +19,28 @@ import java.util.List;
  * Created by Grzegorz on 2016-09-30.
  */
 
-public class DatePickerFragment extends Fragment{
+public class DatePickerFragment extends Fragment {
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            //super.onCreateContentView(inflater, container, savedInstanceState);
-            View view = inflater.inflate(R.layout.date_picker, container, false);
-            final Context context = getActivity().getApplicationContext();
-            final List<ReminderDTO> savedReminders = SavedConfirmationFragment.getSavedReminders(context);
-            final CalendarView calendarView = (CalendarView)view.findViewById(R.id.datePicker);
-            savedReminders.get(0).date = new Date(calendarView.getDate());
-            calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-                @Override
-                public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-                    savedReminders.get(0).date = new Date(calendarView.getDate());
-                    SavedConfirmationFragment.saveReminders(savedReminders, context);
-                }
-            });
-            return view;
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //super.onCreateContentView(inflater, container, savedInstanceState);
+        View view = inflater.inflate(R.layout.date_picker, container, false);
+        final Context context = getActivity().getApplicationContext();
 
-        }
+        final CalendarView calendarView = (CalendarView) view.findViewById(R.id.datePicker);
+
+        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+            @Override
+            public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
+                final List<ReminderDTO> savedReminders = SavedConfirmationFragment.getSavedReminders(context);
+                savedReminders.get(0).year = year;
+                savedReminders.get(0).month = month;
+                savedReminders.get(0).day = dayOfMonth;
+                SavedConfirmationFragment.saveReminders(savedReminders, context);
+            }
+        });
+        return view;
+
+    }
 
 }

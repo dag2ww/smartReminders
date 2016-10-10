@@ -9,28 +9,25 @@ import java.util.Date;
 public class ReminderDTO implements Serializable {
     public int hourOfday;
     public int minute;
-    public Date date;
+    public int year;
+    public int month;
+    public int day;
     public String message = "nothing";
 
     public ReminderDTO(){
 
     }
 
-    public ReminderDTO(int hourOfday, int minute, Date date, String message) {
-        this.hourOfday = hourOfday;
-        this.minute = minute;
-        this.date = date;
-        this.message = message;
-    }
-
     public ReminderDTO(ReminderDTO reminder){
         hourOfday = reminder.hourOfday;
         minute = reminder.minute;
-        date = reminder.date;
+        year = reminder.year;
+        month = reminder.month;
+        day = reminder.day;
         message = reminder.message;
     }
 
     String toShortString(){
-        return message+" "+"H:"+hourOfday+",M:"+minute+"D:"+date;
+        return message+" "+"H:"+hourOfday+",M:"+minute+",D:"+day+"-"+month+"-"+year;
     }
 }

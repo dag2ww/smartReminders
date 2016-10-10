@@ -4,15 +4,16 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:text="Enter The Reminder:"
+        android:text="Select input method:"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/textView" />
 
-    <EditText
+    <Button
+        android:text="Keyboard"
         android:layout_width="match_parent"
-        android:layout_height="112dp"
-        android:inputType="textMultiLine"
-        android:ems="10"
-        android:id="@+id/reminderMessage" />
+        android:layout_height="wrap_content"
+        android:id="@+id/keyboardInput" />
+
+
 </LinearLayout>

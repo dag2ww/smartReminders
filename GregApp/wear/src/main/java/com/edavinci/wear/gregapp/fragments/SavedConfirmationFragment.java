@@ -26,40 +26,42 @@ import static com.edavinci.wear.gregapp.activities.MainActivity.REMINDERS_LIST_F
  * Created by Grzegorz on 2016-09-30.
  */
 
-public class SavedConfirmationFragment extends Fragment{
+public class SavedConfirmationFragment extends Fragment {
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-            //super.onCreateContentView(inflater, container, savedInstanceState);
-            View result = inflater.inflate(R.layout.save_reminder, container, false);
-            result.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(getContext(), ConfirmationActivity.class);
-                    intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
-                            ConfirmationActivity.SUCCESS_ANIMATION);
-                    intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
-                            R.string.reminder_created);
-                    final Context context = getActivity().getApplicationContext();
-                    List<ReminderDTO> savedReminders = getSavedReminders(context);
-                    savedReminders.add(new ReminderDTO(savedReminders.get(0)));
-                    saveReminders(savedReminders,context);
-                    startActivity(intent);
+    @Override
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        //super.onCreateContentView(inflater, container, savedInstanceState);
+        View result = inflater.inflate(R.layout.save_reminder, container, false);
+        result.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ConfirmationActivity.class);
+                intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
+                        ConfirmationActivity.SUCCESS_ANIMATION);
+                intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
+                        R.string.reminder_created);
 
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                    }
-                    getActivity().onBackPressed();
+                final Context context = getActivity().getApplicationContext();
+                List<ReminderDTO> savedReminders = getSavedReminders(context);
+                savedReminders.add(new ReminderDTO(savedReminders.get(0)));
+                saveReminders(savedReminders, context);
+
+                startActivity(intent);
+
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
                 }
-            });
+                getActivity().onBackPressed();
+            }
+        });
 
 
-            return result;
+        return result;
 
-        }
+    }
 
-    public static List<ReminderDTO> getSavedReminders( Context context) {
+    public static List<ReminderDTO> getSavedReminders(Context context) {
         ObjectInputStream oin = null;
         ArrayList<ReminderDTO> savedReminders = new ArrayList<ReminderDTO>();
         try {
@@ -77,12 +79,11 @@ public class SavedConfirmationFragment extends Fragment{
             if (savedReminders.size() == 0) {
                 savedReminders.add(0, new ReminderDTO());
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally{
+        } finally {
             try {
-                if(oin != null) {
+                if (oin != null) {
                     oin.close();
                 }
             } catch (IOException e) {
@@ -95,23 +96,20 @@ public class SavedConfirmationFragment extends Fragment{
     public static void saveReminders(List<ReminderDTO> reminders, Context context) {
         ObjectOutputStream oout = null;
         try {
-            FileInputStream fin = null;
             try {
                 FileOutputStream fout = context.openFileOutput(REMINDERS_LIST_FILENAME, context.MODE_PRIVATE);
                 oout = new ObjectOutputStream(fout);
                 oout.writeObject(reminders);
             } catch (Exception e) {
-                //
+                e.printStackTrace();
             }
-            if (reminders.size() == 0) {
-                reminders.add(0, new ReminderDTO());
-            }
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally{
+        } finally {
             try {
-                oout.close();
+                if (oout != null) {
+                    oout.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.edavinci.wear.gregapp">
-
-    <uses-feature android:name="android.hardware.type.watch" />
-
+    <uses-sdk android:minSdkVersion="23" />
+    <uses-feature android:required="true" android:name="android.hardware.type.watch" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,6 +10,7 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.DeviceDefault">
         <activity
+            android:windowSoftInputMode="stateVisible"
             android:name=".activities.MainActivity"
             android:label="@string/title_activity_main">
             <intent-filter>
@@ -35,7 +35,15 @@
             android:taskAffinity=""
             android:theme="@android:style/Theme.DeviceDefault.Light"></activity>
         <activity
+            android:windowSoftInputMode="stateVisible|adjustResize"
             android:name=".activities.GridActivity"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.DeviceDefault.Light"></activity>
+        <activity
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:name=".activities.EditMessage"
             android:allowEmbedded="true"
             android:exported="true"
             android:taskAffinity=""
