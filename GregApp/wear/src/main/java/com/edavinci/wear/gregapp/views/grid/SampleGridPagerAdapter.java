@@ -7,8 +7,8 @@ import android.support.wearable.view.FragmentGridPagerAdapter;
 
 import com.edavinci.wear.gregapp.R;
 import com.edavinci.wear.gregapp.fragments.DatePickerFragment;
-import com.edavinci.wear.gregapp.fragments.EditBoxFragment;
-import com.edavinci.wear.gregapp.fragments.ListPickerFragment;
+import net.infiniti.touchone.touchone.EditBoxFragment;
+
 import com.edavinci.wear.gregapp.fragments.SavedConfirmationFragment;
 import com.edavinci.wear.gregapp.fragments.TimePickerFragment;
 

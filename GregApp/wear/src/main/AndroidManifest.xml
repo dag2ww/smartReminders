@@ -64,9 +64,24 @@
                 <action android:name="com.edavinci.wear.gregapp.SHOW_NOTIFICATION" />
             </intent-filter>
         </receiver>
+        <receiver
+            android:name="net.infiniti.touchone.touchone.KeyboardTextReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="appfour.intent.action.UPDATE_INPUT" />
+            </intent-filter>
+        </receiver>
         <activity
             android:name="android.support.wearable.activity.ConfirmationActivity">
         </activity>
+        <!--activity
+            android:name=".activities.DemoKeyboardActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+            <intent-filter>
+                <action android:name="appfour.intent.action.REQUEST_INPUT"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </activity-->
     </application>
 
 </manifest>
