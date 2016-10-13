@@ -7,6 +7,7 @@
     <ImageButton
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:srcCompat="@android:drawable/ic_menu_save"
-        android:id="@+id/saveButton" />
+        app:srcCompat="@drawable/ic_action_send"
+        android:id="@+id/saveButton"
+        style="@android:style/Widget.Holo.ImageButton" />
 </LinearLayout>

@@ -7,7 +7,7 @@ import android.support.wearable.view.FragmentGridPagerAdapter;
 
 import com.edavinci.wear.gregapp.R;
 import com.edavinci.wear.gregapp.fragments.DatePickerFragment;
-import net.infiniti.touchone.touchone.EditBoxFragment;
+import net.infiniti.touchone.touchone.InputMethodSelectorFragment;
 
 import com.edavinci.wear.gregapp.fragments.SavedConfirmationFragment;
 import com.edavinci.wear.gregapp.fragments.TimePickerFragment;
@@ -58,7 +58,7 @@ public class SampleGridPagerAdapter extends FragmentGridPagerAdapter {
       } else if(col == 1){
           return new DatePickerFragment();
       } else if(col == 2){
-          return new EditBoxFragment();
+          return new InputMethodSelectorFragment();
       }else {
           return new SavedConfirmationFragment();
       }

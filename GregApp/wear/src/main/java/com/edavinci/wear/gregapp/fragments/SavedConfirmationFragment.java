@@ -1,6 +1,8 @@
 package com.edavinci.wear.gregapp.fragments;
 
+import android.app.AlarmManager;
 import android.app.Fragment;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,19 +10,16 @@ import android.support.wearable.activity.ConfirmationActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 
 import com.edavinci.wear.gregapp.R;
-import com.edavinci.wear.gregapp.activities.ReminderDTO;
+import com.edavinci.wear.gregapp.activities.MainActivity;
+import com.edavinci.wear.gregapp.activities.ReminderCardReceiver;
+import com.edavinci.wear.gregapp.utils.ReminderDTO;
+import com.edavinci.wear.gregapp.utils.PersistanceSupport;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-
-import static com.edavinci.wear.gregapp.activities.MainActivity.REMINDERS_LIST_FILENAME;
 
 /**
  * Created by Grzegorz on 2016-09-30.
@@ -32,87 +31,52 @@ public class SavedConfirmationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         //super.onCreateContentView(inflater, container, savedInstanceState);
         View result = inflater.inflate(R.layout.save_reminder, container, false);
-        result.findViewById(R.id.saveButton).setOnClickListener(new View.OnClickListener() {
+        ImageButton createReminderButton = (ImageButton) result.findViewById(R.id.saveButton);
+
+        createReminderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ConfirmationActivity.class);
-                intent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
+                Intent showSuccessIntent = new Intent(getContext(), ConfirmationActivity.class);
+                showSuccessIntent.putExtra(ConfirmationActivity.EXTRA_ANIMATION_TYPE,
                         ConfirmationActivity.SUCCESS_ANIMATION);
-                intent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
+                showSuccessIntent.putExtra(ConfirmationActivity.EXTRA_MESSAGE,
                         R.string.reminder_created);
 
-                final Context context = getActivity().getApplicationContext();
-                List<ReminderDTO> savedReminders = getSavedReminders(context);
-                savedReminders.add(new ReminderDTO(savedReminders.get(0)));
-                saveReminders(savedReminders, context);
+                createReminderListItemAndAlarm();
 
-                startActivity(intent);
-
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                }
+                startActivity(showSuccessIntent);
                 getActivity().onBackPressed();
             }
         });
-
 
         return result;
 
     }
 
-    public static List<ReminderDTO> getSavedReminders(Context context) {
-        ObjectInputStream oin = null;
-        ArrayList<ReminderDTO> savedReminders = new ArrayList<ReminderDTO>();
-        try {
-            FileInputStream fin = null;
-            try {
-                fin = context.openFileInput(REMINDERS_LIST_FILENAME);
-                oin = new ObjectInputStream(fin);
-                if (oin != null) {
-                    savedReminders = (ArrayList<ReminderDTO>) oin.readObject();
-                }
-            } catch (Exception e) {
-                //
-            }
-
-            if (savedReminders.size() == 0) {
-                savedReminders.add(0, new ReminderDTO());
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (oin != null) {
-                    oin.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return savedReminders;
+    private void createReminderListItemAndAlarm() {
+        List<ReminderDTO> savedReminders = PersistanceSupport.getSavedReminders(getContext());
+        ReminderDTO createdReminder = new ReminderDTO(savedReminders.get(MainActivity.REMINDER_UNDER_WORK_INDEX));
+        savedReminders.add(createdReminder);
+        PersistanceSupport.saveReminders(savedReminders, getContext());
+        createAlarm(createdReminder);
     }
 
-    public static void saveReminders(List<ReminderDTO> reminders, Context context) {
-        ObjectOutputStream oout = null;
-        try {
-            try {
-                FileOutputStream fout = context.openFileOutput(REMINDERS_LIST_FILENAME, context.MODE_PRIVATE);
-                oout = new ObjectOutputStream(fout);
-                oout.writeObject(reminders);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (oout != null) {
-                    oout.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+    private void createAlarm(ReminderDTO reminder) {
+        AlarmManager alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(getContext(), ReminderCardReceiver.class);
+        intent.putExtra(ReminderCardReceiver.CONTENT_TITLE, reminder.message);
+        PendingIntent alarmIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, reminder.year);
+        calendar.set(Calendar.MONTH, reminder.month);
+        calendar.set(Calendar.DAY_OF_MONTH, reminder.day);
+        calendar.set(Calendar.HOUR_OF_DAY, reminder.hourOfday);
+        calendar.set(Calendar.MINUTE, reminder.minute);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        alarmMgr.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
     }
 }
