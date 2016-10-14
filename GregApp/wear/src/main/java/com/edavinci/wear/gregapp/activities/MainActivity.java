@@ -14,6 +14,8 @@ import com.edavinci.wear.gregapp.views.list.ListViewAdapter;
 import com.edavinci.wear.gregapp.views.list.ListViewItem;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends Activity implements WearableListView.ClickListener {
@@ -22,6 +24,16 @@ public class MainActivity extends Activity implements WearableListView.ClickList
 
     private WearableListView listView;
     private MainActivity activityInstance;
+    ListViewAdapter dataAdapter;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (dataAdapter != null) {
+            dataAdapter.reloadItems();
+        }
+    }
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -33,28 +45,16 @@ public class MainActivity extends Activity implements WearableListView.ClickList
         stub.setOnLayoutInflatedListener(new WatchViewStub.OnLayoutInflatedListener() {
             @Override
             public void onLayoutInflated(WatchViewStub stub) {
-                List<ListViewItem> viewItemList = prepareRemindersList();
+                dataAdapter = new ListViewAdapter(stub.getContext());
+                dataAdapter.reloadItems();
                 listView = (WearableListView) stub.findViewById(R.id.wearable_list_view);
-                listView.setAdapter(new ListViewAdapter(stub.getContext(), viewItemList));
+                listView.setAdapter(dataAdapter);
                 listView.setClickListener(activityInstance);
-                listView.setGreedyTouchMode( true );
+                listView.setGreedyTouchMode(true);
             }
-            });
-        }
-
-    private List<ListViewItem> prepareRemindersList() {
-        List<ListViewItem> viewItemList = new ArrayList<ListViewItem>();
-        viewItemList.add(new ListViewItem(R.drawable.ic_input_add, getString(R.string.create_reminder)));
-
-        List<ReminderDTO> savedReminders = PersistanceSupport.getSavedReminders(getApplicationContext());
-        for(int i = 0; i < savedReminders.size(); i++){
-            System.err.println("reading from file: "+savedReminders.get(i));
-            if(i > 0) {
-                viewItemList.add(new ListViewItem(R.mipmap.ic_launcher, savedReminders.get(i).toShortString()));
-            }
-        }
-        return viewItemList;
+        });
     }
+
 
     @Override
     public void onClick(WearableListView.ViewHolder viewHolder) {

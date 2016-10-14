@@ -16,19 +16,9 @@
             android:label="@string/title_activity_main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--activity
-            android:name=".DavinciReminders"
-            android:label="CoolDavinviReminders">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity-->
         <activity
             android:name=".activities.ReminderCardExtendedDisplay"
             android:allowEmbedded="true"
@@ -42,15 +32,6 @@
             android:exported="true"
             android:taskAffinity=""
             android:theme="@android:style/Theme.DeviceDefault.Light"></activity>
-
-        <!--activity
-            android:name=".activities.ListViewActivity"
-            android:allowEmbedded="true"
-            android:exported="true"
-            android:taskAffinity=""
-            android:theme="@android:style/Theme.DeviceDefault.Light"></activity-->
-
-
         <receiver
             android:name=".activities.ReminderCardReceiver"
             android:exported="true">
@@ -61,14 +42,6 @@
         <activity
             android:name="android.support.wearable.activity.ConfirmationActivity">
         </activity>
-        <!--activity
-            android:name=".activities.DemoKeyboardActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
-            <intent-filter>
-                <action android:name="appfour.intent.action.REQUEST_INPUT"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity-->
     </application>
 
 </manifest>
